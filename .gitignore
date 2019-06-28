@@ -1,6 +1,5 @@
-*.cpp
-*.exe
-*.py
+sol*
+tmp*
 input.txt
 out
 __pycache__/*
