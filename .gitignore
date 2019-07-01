@@ -2,5 +2,5 @@ sol*
 tmp*
 input.txt
 out
-__pycache__/*
-.vscode/*
+__pycache__*
+.vscode*
