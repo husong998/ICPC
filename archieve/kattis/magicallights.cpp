@@ -1,9 +1,14 @@
 #include<bits/stdc++.h>
 using namespace std;
+/* solution for kattis magicallights
+   do dfs to re-index vertices because all the vertices in a subtree are contiguous in dfs order
+   each subtree then correspond to a subarray, which can be queried and updated online using fenwick tree
+ */
 
 const int maxn = 300010;
 int c[maxn], l[maxn], r[maxn], tot, n;
 vector<int> adj[maxn];
+// using range xor for parity check, the number of odd colors correponds to the number of on bits in the range xor
 bitset<110> ft[maxn];
 
 int dfs(int u, int fa) {
