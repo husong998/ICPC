@@ -6,7 +6,6 @@ vector<int> adj[maxn];
 int memo[maxn][2];
 
 int dp(int u, int fa, int fl) {
-  if (adj[u].size() == 1) return memo[u][fl] = (fl ? M : 0);
   if (memo[u][fl] != -1) return memo[u][fl];
   if (fl) {
     memo[u][fl] = M;
@@ -47,7 +46,7 @@ int main() {
     tot = n1 = 0;
     memset(memo, -1, sizeof memo);
     for (int i = 0; i < n; ++i) {
-      if (!memo[i][0] && !memo[i][1]) {
+      if (memo[i][0] == -1 && memo[i][1] == -1) {
         int cur = min(dp(i, -1, 0), dp(i, -1, 1));
         tot += cur / M;
         n1 += cur % M;
