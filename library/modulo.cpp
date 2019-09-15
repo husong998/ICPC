@@ -1,46 +1,52 @@
-template <std::uint32_t mod>
-class modint
-{
-private:
-  std::uint32_t n;
+using ll = long long;
+ll modinv(ll a, ll m) {
+  assert(m > 0);
+  if (m == 1) return 0;
+  a %= m;
+  if (a < 0) a += m;
+  assert(a != 0);
+  if (a == 1) return 1;
+  return m - modinv(m, a) * m / a;
+}
 
+template <int MOD_> struct modnum {
+private:
+  int v;
 public:
-  modint() : n(0){};
-  modint(std::uint64_t n_) : n(n_ % mod){};
-  bool operator==(const modint &m) const { return n == m.n; }
-  bool operator!=(const modint &m) const { return n != m.n; }
-  std::uint32_t get() const { return n; }
-  modint &operator+=(const modint &m)
-  {
-    n += m.n;
-    n = (n < mod ? n : n - mod);
+  static const int MOD = MOD_;
+
+  modnum() : v(0) {}
+  modnum(ll v_) : v(int(v_ % MOD)) { if (v < 0) v += MOD; }
+  explicit operator int () const { return v; }
+  friend bool operator == (const modnum& a, const modnum& b) { return a.v == b.v; }
+  friend bool operator != (const modnum&a, const modnum& b) { return a.v != b.v; }
+  
+  modnum operator ~ () const {
+    modnum res;
+    res.v = modinv(v, MOD);
+    return res;
+  }
+  
+  modnum& operator += (const modnum& o) {
+    v += o.v;
+    if (v >= MOD) v -= MOD;
     return *this;
   }
-  modint &operator-=(const modint &m)
-  {
-    n += mod - m.n;
-    n = (n < mod ? n : n - mod);
+  modnum& operator -= (const modnum& o) {
+    v -= o.v;
+    if (v < 0) v += MOD;
     return *this;
   }
-  modint &operator*=(const modint &m)
-  {
-    n = std::uint64_t(n) * m.n % mod;
+  modnum& operator *= (const modnum &o) {
+    v = int(ll(v) * ll(o.v) % MOD);
     return *this;
   }
-  modint operator+(const modint &m) const { return modint(*this) += m; }
-  modint operator-(const modint &m) const { return modint(*this) -= m; }
-  modint operator*(const modint &m) const { return modint(*this) *= m; }
-  modint binpow(std::uint64_t b) const
-  {
-    modint ans = 1, m = modint(*this);
-    while (b)
-    {
-      if (b & 1)
-        ans *= m;
-      m *= m;
-      b >>= 1;
-    }
-    return ans;
+  modnum& operator /= (const modnum& o) {
+    return *this *= (~o);
   }
-  modint inv() { return (*this).binpow(mod - 2); }
+  
+  friend modnum operator + (const modnum& a, const modnum& b) { return modnum(a) += b; }
+  friend modnum operator - (const modnum& a, const modnum& b) { return modnum(a) -= b; }
+  friend modnum operator * (const modnum& a, const modnum& b) { return modnum(a) *= b; }
+  friend modnum operator / (const modnum& a, const modnum& b) { return modnum(a) /= b; }
 };
